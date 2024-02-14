@@ -1,12 +1,8 @@
 <div class="cmd #history# cmd-widget" data-type="info" data-subtype="string" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#" data-eqLogic_id="#eqLogic_id#" style="width: 100%;">
 <!-- ################ Distribution onduleur ################ 
   Widget name : cmd.info.string.distribution_onduleur
-  Author : Phpvarious
-  Inspiration : https://github.com/slipx06/sunsynk-power-flow-card/tree/master
-  Last Uptade : 2024/01/30 23h30 - Phpvarious
-
-  Merci @bison pour la partie seuil des puissances ;-)
-
+  Author : cyril.charlier
+  Last Uptade : 2024/02/12 23h30 - cyril.charlier basé sur l'énorme travail de Phpvarious
   ###### TODO ######
 -->
   <div class="widget#id#" id="widget#id#"></div>
@@ -56,9 +52,9 @@
   </style>
   <script>
     var debug#id# = ('#debug#' == 1) ? true : false;
-    var fullJs#id# = false
-    var jeedomVersion#id# = 4.4
-    var versionWidget#id# = '29/01/2024 21h40'
+    var fullJs#id# = false;
+    var jeedomVersion#id# = 4.4;
+    var versionWidget#id# = '12/02/2024 23h30';
     
     if (debug#id#) console.log('┌─────────────────── Widget Distribution Onduleur [#id#] Compatibilité V4.3 V4.4 [' + versionWidget#id# + '] ───────────────')
     /* Compatibilité V4.2 V4.3 V4.4 */
@@ -377,6 +373,46 @@
           current: false,
           current_unit: 0
         },
+        pv5: {
+          name: '',
+          power: 0,
+          energy: false,
+          energy_unit: '',
+          voltage: false,
+          voltage_unit: 'A',
+          current: false,
+          current_unit: 0
+        },
+        pv6: {
+          name: '',
+          power: 0,
+          energy: false,
+          energy_unit: '',
+          voltage: false,
+          voltage_unit: 'A',
+          current: false,
+          current_unit: 0
+        },
+        pv7: {
+          name: '',
+          power: 0,
+          energy: false,
+          energy_unit: '',
+          voltage: false,
+          voltage_unit: 'A',
+          current: false,
+          current_unit: 0
+        },
+        pv8: {
+          name: '',
+          power: 0,
+          energy: false,
+          energy_unit: '',
+          voltage: false,
+          voltage_unit: 'A',
+          current: false,
+          current_unit: 0
+        },
         has_pv_power: false,
         power: 0,
         unit: 'W',
@@ -534,6 +570,10 @@
     if ("#pv2Name#" != '#'+'pv2Name#') config#id#.solar.pv2.name = "#pv2Name#"
     if ("#pv3Name#" != '#'+'pv3Name#') config#id#.solar.pv3.name = "#pv3Name#"
     if ("#pv4Name#" != '#'+'pv4Name#') config#id#.solar.pv4.name = "#pv4Name#"
+    if ("#pv5Name#" != '#'+'pv5Name#') config#id#.solar.pv5.name = "#pv5Name#"
+    if ("#pv6Name#" != '#'+'pv6Name#') config#id#.solar.pv6.name = "#pv6Name#"
+    if ("#pv7Name#" != '#'+'pv7Name#') config#id#.solar.pv7.name = "#pv7Name#"
+    if ("#pv8Name#" != '#'+'pv8Name#') config#id#.solar.pv8.name = "#pv8Name#"
     if (is_numeric('#pvMaxPower#')) config#id#.solar.max_power = '#pvMaxPower#'
     if ("#dailySolarText#" != '#'+'dailySolarText#') config#id#.solar.daily.text = "#dailySolarText#"
     if ("#solarColor#" != '#'+'solarColor#') document.documentElement.style.setProperty('--solar_colour#id#', '#solarColor#')
@@ -743,6 +783,110 @@ if ("#colorDanger#" != '#'+'colorDanger#') document.documentElement.style.setPro
             })
           }
           ///////////////////////////////////////////////////////////////////////
+          ////////////////////////////////  pv5 power ///////////////////////////
+          ///////////////////////////////////////////////////////////////////////
+          else if (cmds[j].name == 'pv5 power'){
+            if (debug#id# == 1) console.log('| pv5_power')
+            jeedom.cmd.execute({
+              id: id_eql,
+              async: false,
+              success:  function(pv5Value) {
+                if (debug#id# == 1) console.log('|    └> cmd.execute : ' + pv5Value)
+                config#id#.solar.mppts = 5
+                if (typeof pv5Value === "number") {
+                  config#id#.solar.pv5.power = parseFloat(pv5Value)
+                }
+              }
+            })
+            jeedom.cmd.addUpdateFunction(cmds[j].id, function(_options) {
+              if (debug#id# == 1) console.log('event for ' + name + '[' + id_eql + '] -> ' + _options.value)
+              if (_options.value != undefined) 
+              {
+                config#id#.solar.pv5.power = parseFloat(_options.value)
+                document.getElementById("pv5_power_state#id#").innerHTML = trunc#id#(config#id#.solar.pv5.power, 1) + ' ' + config#id#.solar.unit
+                if (config#id#.solar.has_pv_power === false) calculatePv#id#('pv5_power')
+              }
+            })
+          }
+          ///////////////////////////////////////////////////////////////////////
+          ////////////////////////////////  pv6 power ///////////////////////////
+          ///////////////////////////////////////////////////////////////////////
+          else if (cmds[j].name == 'pv6 power'){
+            if (debug#id# == 1) console.log('| pv6_power')
+            jeedom.cmd.execute({
+              id: id_eql,
+              async: false,
+              success:  function(pv6Value) {
+                if (debug#id# == 1) console.log('|    └> cmd.execute : ' + pv6Value)
+                config#id#.solar.mppts = 6
+                if (typeof pv6Value === "number") {
+                  config#id#.solar.pv6.power = parseFloat(pv6Value)
+                }
+              }
+            })
+            jeedom.cmd.addUpdateFunction(cmds[j].id, function(_options) {
+              if (debug#id# == 1) console.log('event for ' + name + '[' + id_eql + '] -> ' + _options.value)
+              if (_options.value != undefined) 
+              {
+                config#id#.solar.pv6.power = parseFloat(_options.value)
+                document.getElementById("pv6_power_state#id#").innerHTML = trunc#id#(config#id#.solar.pv6.power, 1) + ' ' + config#id#.solar.unit
+                if (config#id#.solar.has_pv_power === false) calculatePv#id#('pv6_power')
+              }
+            })
+          }
+          ///////////////////////////////////////////////////////////////////////
+          ////////////////////////////////  pv7 power ///////////////////////////
+          ///////////////////////////////////////////////////////////////////////
+          else if (cmds[j].name == 'pv7 power'){
+            if (debug#id# == 1) console.log('| pv7_power')
+            jeedom.cmd.execute({
+              id: id_eql,
+              async: false,
+              success:  function(pv7Value) {
+                if (debug#id# == 1) console.log('|    └> cmd.execute : ' + pv7Value)
+                config#id#.solar.mppts = 7
+                if (typeof pv7Value === "number") {
+                  config#id#.solar.pv7.power = parseFloat(pv7Value)
+                }
+              }
+            })
+            jeedom.cmd.addUpdateFunction(cmds[j].id, function(_options) {
+              if (debug#id# == 1) console.log('event for ' + name + '[' + id_eql + '] -> ' + _options.value)
+              if (_options.value != undefined) 
+              {
+                config#id#.solar.pv7.power = parseFloat(_options.value)
+                document.getElementById("pv7_power_state#id#").innerHTML = trunc#id#(config#id#.solar.pv7.power, 1) + ' ' + config#id#.solar.unit
+                if (config#id#.solar.has_pv_power === false) calculatePv#id#('pv7_power')
+              }
+            })
+          }
+          ///////////////////////////////////////////////////////////////////////
+          ////////////////////////////////  pv8 power ///////////////////////////
+          ///////////////////////////////////////////////////////////////////////
+          else if (cmds[j].name == 'pv8 power'){
+            if (debug#id# == 1) console.log('| pv8_power')
+            jeedom.cmd.execute({
+              id: id_eql,
+              async: false,
+              success:  function(pv8Value) {
+                if (debug#id# == 1) console.log('|    └> cmd.execute : ' + pv8Value)
+                config#id#.solar.mppts = 8
+                if (typeof pv8Value === "number") {
+                  config#id#.solar.pv8.power = parseFloat(pv8Value)
+                }
+              }
+            })
+            jeedom.cmd.addUpdateFunction(cmds[j].id, function(_options) {
+              if (debug#id# == 1) console.log('event for ' + name + '[' + id_eql + '] -> ' + _options.value)
+              if (_options.value != undefined) 
+              {
+                config#id#.solar.pv8.power = parseFloat(_options.value)
+                document.getElementById("pv8_power_state#id#").innerHTML = trunc#id#(config#id#.solar.pv8.power, 1) + ' ' + config#id#.solar.unit
+                if (config#id#.solar.has_pv_power === false) calculatePv#id#('pv8_power')
+              }
+            })
+          }
+          ///////////////////////////////////////////////////////////////////////
           ///////////////////////////////  pv1 Voltage //////////////////////////
           ///////////////////////////////////////////////////////////////////////
           else if (cmds[j].name == 'pv1 voltage'){
@@ -831,6 +975,94 @@ if ("#colorDanger#" != '#'+'colorDanger#') document.documentElement.style.setPro
             })
           }
           ///////////////////////////////////////////////////////////////////////
+          ///////////////////////////////  pv5 Voltage //////////////////////////
+          ///////////////////////////////////////////////////////////////////////
+          else if (cmds[j].name == 'pv5 voltage'){
+            if (debug#id# == 1) console.log('| pv5 voltage')
+            jeedom.cmd.execute({
+              id: id_eql,
+              async: false,
+              success:  function(pv5Voltage) {
+                if (debug#id# == 1) console.log('|    └> cmd.execute : ' + pv5Voltage)
+                config#id#.solar.pv5.voltage_unit = cmds[j].unite
+                if (debug#id# == 1) console.log('|    └> unite : '  + config#id#.solar.pv5.voltage_unit)
+                if (typeof pv5Voltage === "number") {
+                  config#id#.solar.pv5.voltage = trunc#id#(parseFloat(pv5Voltage), 1)
+                } else config#id#.solar.pv5.voltage = 0
+              }
+            })
+            jeedom.cmd.addUpdateFunction(cmds[j].id, function(_options) {
+              if (debug#id# == 1) console.log('event for ' + name + '[' + id_eql + '] -> ' + _options.value)
+              if (_options.value != undefined) document.getElementById("pv5_voltage#id#").innerHTML = trunc#id#(parseFloat(_options.value), 1) + ' ' + config#id#.solar.pv5.voltage_unit
+            })
+          }
+          ///////////////////////////////////////////////////////////////////////
+          ///////////////////////////////  pv6 Voltage //////////////////////////
+          ///////////////////////////////////////////////////////////////////////
+          else if (cmds[j].name == 'pv6 voltage'){
+            if (debug#id# == 1) console.log('| pv6 voltage')
+            jeedom.cmd.execute({
+              id: id_eql,
+              async: false,
+              success:  function(pv6Voltage) {
+                if (debug#id# == 1) console.log('|    └> cmd.execute : ' + pv6Voltage)
+                config#id#.solar.pv6.voltage_unit = cmds[j].unite
+                if (debug#id# == 1) console.log('|    └> unite : '  + config#id#.solar.pv6.voltage_unit)
+                if (typeof pv6Voltage === "number") {
+                  config#id#.solar.pv6.voltage = trunc#id#(parseFloat(pv6Voltage), 1)
+                } else config#id#.solar.pv6.voltage = 0
+              }
+            })
+            jeedom.cmd.addUpdateFunction(cmds[j].id, function(_options) {
+              if (debug#id# == 1) console.log('event for ' + name + '[' + id_eql + '] -> ' + _options.value)
+              if (_options.value != undefined) document.getElementById("pv6_voltage#id#").innerHTML = trunc#id#(parseFloat(_options.value), 1) + ' ' + config#id#.solar.pv6.voltage_unit
+            })
+          }
+          ///////////////////////////////////////////////////////////////////////
+          ///////////////////////////////  pv7 Voltage //////////////////////////
+          ///////////////////////////////////////////////////////////////////////
+          else if (cmds[j].name == 'pv7 voltage'){
+            if (debug#id# == 1) console.log('| pv7 voltage')
+            jeedom.cmd.execute({
+              id: id_eql,
+              async: false,
+              success:  function(pv7Voltage) {
+                if (debug#id# == 1) console.log('|    └> cmd.execute : ' + pv7Voltage)
+                config#id#.solar.pv7.voltage_unit = cmds[j].unite
+                if (debug#id# == 1) console.log('|    └> unite : '  + config#id#.solar.pv7.voltage_unit)
+                if (typeof pv7Voltage === "number") {
+                  config#id#.solar.pv7.voltage = trunc#id#(parseFloat(pv7Voltage), 1)
+                } else config#id#.solar.pv7.voltage = 0
+              }
+            })
+            jeedom.cmd.addUpdateFunction(cmds[j].id, function(_options) {
+              if (debug#id# == 1) console.log('event for ' + name + '[' + id_eql + '] -> ' + _options.value)
+              if (_options.value != undefined) document.getElementById("pv7_voltage#id#").innerHTML = trunc#id#(parseFloat(_options.value), 1) + ' ' + config#id#.solar.pv7.voltage_unit
+            })
+          }
+          ///////////////////////////////////////////////////////////////////////
+          ///////////////////////////////  pv8 Voltage //////////////////////////
+          ///////////////////////////////////////////////////////////////////////
+          else if (cmds[j].name == 'pv8 voltage'){
+            if (debug#id# == 1) console.log('| pv8 voltage')
+            jeedom.cmd.execute({
+              id: id_eql,
+              async: false,
+              success:  function(pv8Voltage) {
+                if (debug#id# == 1) console.log('|    └> cmd.execute : ' + pv8Voltage)
+                config#id#.solar.pv8.voltage_unit = cmds[j].unite
+                if (debug#id# == 1) console.log('|    └> unite : '  + config#id#.solar.pv8.voltage_unit)
+                if (typeof pv8Voltage === "number") {
+                  config#id#.solar.pv8.voltage = trunc#id#(parseFloat(pv8Voltage), 1)
+                } else config#id#.solar.pv8.voltage = 0
+              }
+            })
+            jeedom.cmd.addUpdateFunction(cmds[j].id, function(_options) {
+              if (debug#id# == 1) console.log('event for ' + name + '[' + id_eql + '] -> ' + _options.value)
+              if (_options.value != undefined) document.getElementById("pv8_voltage#id#").innerHTML = trunc#id#(parseFloat(_options.value), 1) + ' ' + config#id#.solar.pv8.voltage_unit
+            })
+          }
+          ///////////////////////////////////////////////////////////////////////
           ///////////////////////////////  pv1 Current //////////////////////////
           ///////////////////////////////////////////////////////////////////////
           else if (cmds[j].name == 'pv1 current'){
@@ -916,6 +1148,94 @@ if ("#colorDanger#" != '#'+'colorDanger#') document.documentElement.style.setPro
             jeedom.cmd.addUpdateFunction(cmds[j].id, function(_options) {
               if (debug#id# == 1) console.log('event for ' + name + '[' + id_eql + '] -> ' + _options.value)
               if (_options.value != undefined) document.getElementById("pv4_current#id#").innerHTML = trunc#id#(parseFloat(_options.value), 1) + ' ' + config#id#.solar.pv4.current_unit
+            })
+          }
+          ///////////////////////////////////////////////////////////////////////
+          ///////////////////////////////  pv5 Current //////////////////////////
+          ///////////////////////////////////////////////////////////////////////
+          else if (cmds[j].name == 'pv5 current'){
+            if (debug#id# == 1) console.log('| pv5 current')
+            jeedom.cmd.execute({
+              id: id_eql,
+              async: false,
+              success:  function(pv5Current) {
+                if (debug#id# == 1) console.log('|    └> cmd.execute : ' + pv5Current)
+                config#id#.solar.pv5.current_unit = cmds[j].unite
+                if (debug#id# == 1) console.log('|    └> unite : '  + config#id#.solar.pv5.current_unit)
+                if (typeof pv5Current === "number") {
+                  config#id#.solar.pv5.current = trunc#id#(parseFloat(pv5Current), 1)
+                } else config#id#.solar.pv5.current = 0
+              }
+            })
+            jeedom.cmd.addUpdateFunction(cmds[j].id, function(_options) {
+              if (debug#id# == 1) console.log('event for ' + name + '[' + id_eql + '] -> ' + _options.value)
+              if (_options.value != undefined) document.getElementById("pv5_current#id#").innerHTML = trunc#id#(parseFloat(_options.value), 1) + ' ' + config#id#.solar.pv5.current_unit
+            })
+          }
+          ///////////////////////////////////////////////////////////////////////
+          ///////////////////////////////  pv6 Current //////////////////////////
+          ///////////////////////////////////////////////////////////////////////
+          else if (cmds[j].name == 'pv6 current'){
+            if (debug#id# == 1) console.log('| pv6 current')
+            jeedom.cmd.execute({
+              id: id_eql,
+              async: false,
+              success:  function(pv6Current) {
+                if (debug#id# == 1) console.log('|    └> cmd.execute : ' + pv6Current)
+                config#id#.solar.pv6.current_unit = cmds[j].unite
+                if (debug#id# == 1) console.log('|    └> unite : '  + config#id#.solar.pv6.current_unit)
+                if (typeof pv6Current === "number") {
+                  config#id#.solar.pv6.current = trunc#id#(parseFloat(pv6Current), 1)
+                } else config#id#.solar.pv6.current = 0
+              }
+            })
+            jeedom.cmd.addUpdateFunction(cmds[j].id, function(_options) {
+              if (debug#id# == 1) console.log('event for ' + name + '[' + id_eql + '] -> ' + _options.value)
+              if (_options.value != undefined) document.getElementById("pv6_current#id#").innerHTML = trunc#id#(parseFloat(_options.value), 1) + ' ' + config#id#.solar.pv6.current_unit
+            })
+          }
+          ///////////////////////////////////////////////////////////////////////
+          ///////////////////////////////  pv7 Current //////////////////////////
+          ///////////////////////////////////////////////////////////////////////
+          else if (cmds[j].name == 'pv7 current'){
+            if (debug#id# == 1) console.log('| pv7 current')
+            jeedom.cmd.execute({
+              id: id_eql,
+              async: false,
+              success:  function(pv7Current) {
+                if (debug#id# == 1) console.log('|    └> cmd.execute : ' + pv7Current)
+                config#id#.solar.pv7.current_unit = cmds[j].unite
+                if (debug#id# == 1) console.log('|    └> unite : '  + config#id#.solar.pv7.current_unit)
+                if (typeof pv7Current === "number") {
+                  config#id#.solar.pv7.current = trunc#id#(parseFloat(pv7Current), 1)
+                } else config#id#.solar.pv7.current = 0
+              }
+            })
+            jeedom.cmd.addUpdateFunction(cmds[j].id, function(_options) {
+              if (debug#id# == 1) console.log('event for ' + name + '[' + id_eql + '] -> ' + _options.value)
+              if (_options.value != undefined) document.getElementById("pv7_current#id#").innerHTML = trunc#id#(parseFloat(_options.value), 1) + ' ' + config#id#.solar.pv7.current_unit
+            })
+          }
+          ///////////////////////////////////////////////////////////////////////
+          ///////////////////////////////  pv8 Current //////////////////////////
+          ///////////////////////////////////////////////////////////////////////
+          else if (cmds[j].name == 'pv8 current'){
+            if (debug#id# == 1) console.log('| pv8 current')
+            jeedom.cmd.execute({
+              id: id_eql,
+              async: false,
+              success:  function(pv8Current) {
+                if (debug#id# == 1) console.log('|    └> cmd.execute : ' + pv8Current)
+                config#id#.solar.pv8.current_unit = cmds[j].unite
+                if (debug#id# == 1) console.log('|    └> unite : '  + config#id#.solar.pv8.current_unit)
+                if (typeof pv8Current === "number") {
+                  config#id#.solar.pv8.current = trunc#id#(parseFloat(pv8Current), 1)
+                } else config#id#.solar.pv8.current = 0
+              }
+            })
+            jeedom.cmd.addUpdateFunction(cmds[j].id, function(_options) {
+              if (debug#id# == 1) console.log('event for ' + name + '[' + id_eql + '] -> ' + _options.value)
+              if (_options.value != undefined) document.getElementById("pv8_current#id#").innerHTML = trunc#id#(parseFloat(_options.value), 1) + ' ' + config#id#.solar.pv8.current_unit
             })
           }
           ///////////////////////////////////////////////////////////////////////
@@ -1027,6 +1347,118 @@ if ("#colorDanger#" != '#'+'colorDanger#') document.documentElement.style.setPro
               {
                 let pv4Energy = autoValueArray#id#(parseFloat(_options.value),config#id#.solar.pv4.energy_unit)
                 document.getElementById("pv4_energy#id#").innerHTML = trunc#id#(pv4Energy.value, 3, 1) + ' ' + pv4Energy.unit
+              }
+            })
+          }
+          ///////////////////////////////////////////////////////////////////////
+          ///////////////////////////////  pv5 Energy ///////////////////////////
+          ///////////////////////////////////////////////////////////////////////
+          else if (cmds[j].name == 'pv5 energy'){
+            //config#id#.solar.daily.show = true
+            if (debug#id# == 1) console.log('| pv5 energy')
+            jeedom.cmd.execute({
+              id: id_eql,
+              async: false,
+              success:  function(pv5Energy) {
+                if (debug#id# == 1) console.log('|    └> cmd.execute : ' + pv5Energy)
+                config#id#.solar.pv5.energy_unit = cmds[j].unite
+                if (debug#id# == 1) console.log('|    └> unite : '  + config#id#.solar.pv5.energy_unit)
+                if (typeof pv5Energy === "number") {
+                  config#id#.solar.pv5.energy = parseFloat(pv5Energy)
+                }
+                else config#id#.solar.pv5.energy = 0
+              }
+            })
+            jeedom.cmd.addUpdateFunction(cmds[j].id, function(_options) {
+              if (debug#id# == 1) console.log('event for ' + name + '[' + id_eql + '] -> ' + _options.value)
+              if (_options.value != undefined) 
+              {
+                let pv5Energy = autoValueArray#id#(parseFloat(_options.value),config#id#.solar.pv5.energy_unit)
+                document.getElementById("pv5_energy#id#").innerHTML = trunc#id#(pv5Energy.value, 3, 1) + ' ' + pv5Energy.unit
+              }
+            })
+          }
+          ///////////////////////////////////////////////////////////////////////
+          ///////////////////////////////  pv6 Energy ///////////////////////////
+          ///////////////////////////////////////////////////////////////////////
+          else if (cmds[j].name == 'pv6 energy'){
+            //config#id#.solar.daily.show = true
+            if (debug#id# == 1) console.log('| pv6 energy')
+            jeedom.cmd.execute({
+              id: id_eql,
+              async: false,
+              success:  function(pv6Energy) {
+                if (debug#id# == 1) console.log('|    └> cmd.execute : ' + pv6Energy)
+                config#id#.solar.pv6.energy_unit = cmds[j].unite
+                if (debug#id# == 1) console.log('|    └> unite : '  + config#id#.solar.pv6.energy_unit)
+                if (typeof pv6Energy === "number") {
+                  config#id#.solar.pv6.energy = parseFloat(pv6Energy)
+                }
+                else config#id#.solar.pv6.energy = 0
+              }
+            })
+            jeedom.cmd.addUpdateFunction(cmds[j].id, function(_options) {
+              if (debug#id# == 1) console.log('event for ' + name + '[' + id_eql + '] -> ' + _options.value)
+              if (_options.value != undefined) 
+              {
+                let pv6Energy = autoValueArray#id#(parseFloat(_options.value),config#id#.solar.pv6.energy_unit)
+                document.getElementById("pv6_energy#id#").innerHTML = trunc#id#(pv6Energy.value, 3, 1) + ' ' + pv6Energy.unit
+              }
+            })
+          }
+          ///////////////////////////////////////////////////////////////////////
+          ///////////////////////////////  pv7 Energy ///////////////////////////
+          ///////////////////////////////////////////////////////////////////////
+          else if (cmds[j].name == 'pv7 energy'){
+            //config#id#.solar.daily.show = true
+            if (debug#id# == 1) console.log('| pv7 energy')
+            jeedom.cmd.execute({
+              id: id_eql,
+              async: false,
+              success:  function(pv7Energy) {
+                if (debug#id# == 1) console.log('|    └> cmd.execute : ' + pv7Energy)
+                config#id#.solar.pv7.energy_unit = cmds[j].unite
+                if (debug#id# == 1) console.log('|    └> unite : '  + config#id#.solar.pv7.energy_unit)
+                if (typeof pv7Energy === "number") {
+                  config#id#.solar.pv7.energy = parseFloat(pv7Energy)
+                }
+                else config#id#.solar.pv7.energy = 0
+              }
+            })
+            jeedom.cmd.addUpdateFunction(cmds[j].id, function(_options) {
+              if (debug#id# == 1) console.log('event for ' + name + '[' + id_eql + '] -> ' + _options.value)
+              if (_options.value != undefined) 
+              {
+                let pv7Energy = autoValueArray#id#(parseFloat(_options.value),config#id#.solar.pv7.energy_unit)
+                document.getElementById("pv7_energy#id#").innerHTML = trunc#id#(pv7Energy.value, 3, 1) + ' ' + pv7Energy.unit
+              }
+            })
+          }
+          ///////////////////////////////////////////////////////////////////////
+          ///////////////////////////////  pv8 Energy ///////////////////////////
+          ///////////////////////////////////////////////////////////////////////
+          else if (cmds[j].name == 'pv8 energy'){
+            //config#id#.solar.daily.show = true
+            if (debug#id# == 1) console.log('| pv8 energy')
+            jeedom.cmd.execute({
+              id: id_eql,
+              async: false,
+              success:  function(pv8Energy) {
+                if (debug#id# == 1) console.log('|    └> cmd.execute : ' + pv8Energy)
+                config#id#.solar.pv8.energy_unit = cmds[j].unite
+                if (debug#id# == 1) console.log('|    └> unite : '  + config#id#.solar.pv8.energy_unit)
+                if (typeof pv8Energy === "number") {
+                  config#id#.solar.pv8.energy = parseFloat(pv8Energy)
+                }
+                else config#id#.solar.pv8.energy = 0
+              }
+            })
+            jeedom.cmd.addUpdateFunction(cmds[j].id, function(_options) {
+              if (debug#id# == 1) console.log('event for ' + name + '[' + id_eql + '] -> ' + _options.value)
+              if (_options.value != undefined) 
+              {
+                let pv8Energy = autoValueArray#id#(parseFloat(_options.value),config#id#.solar.pv8.energy_unit)
+                document.getElementById("pv8_energy#id#").innerHTML = trunc#id#(pv8Energy.value, 3, 1) + ' ' + pv8Energy.unit
               }
             })
           }
@@ -2407,7 +2839,7 @@ if ("#colorDanger#" != '#'+'colorDanger#') document.documentElement.style.setPro
           // entities.pv3_current_114
           html += '<text id="pv3_current#id#" x="107" y="106" class="ft9-#id# right-align#id#" display="' + ((config#id#.show_solar === false || config#id#.solar.pv3.current === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2) ? 'none' : '') + '" fill="var(--solar_colour#id#)" >' + config#id#.solar.pv3.current + ' ' + config#id#.solar.pv3.current_unit + '</text>'
           
-          html += '<path id="pv3-line#id#" d="M 113 95 L 113 135 Q 113 144 120 144 L 205 144" class="' + ((config#id#.show_solar === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2) ? 'hidden-#id#' : '') + '" fill="none" stroke="var(--solar_colour#id#)" stroke-width="1" stroke-miterlimit="10"  pointer-events="stroke"/>'
+          html += '<path id="pv3-line#id#" d="M 113 95 L 113 129" class="' + ((config#id#.show_solar === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2) ? 'hidden-#id#' : '') + '" fill="none" stroke="var(--solar_colour#id#)" stroke-width="1" stroke-miterlimit="10"  pointer-events="stroke"/>'
           html += '<circle id="pv3-dot#id#" cx="0" cy="0" r="3" class="' + ((config#id#.show_solar === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2) ? 'hidden-#id#' : '') + '" fill="' + ((parseInt(config#id#.solar.pv3.power) <= 0) ? 'transparent' : 'var(--solar_colour#id#)') + '">'
           html += '<animateMotion id="anim_pv3#id#" dur="' + config#id#.solar.animation_speed + 's" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear"><mpath xlink:href="#pv3-line#id#"/></animateMotion></circle>'
           ///////////////////////////////////////////////////////
@@ -2433,9 +2865,114 @@ if ("#colorDanger#" != '#'+'colorDanger#') document.documentElement.style.setPro
           // entities.pv4_current_116
           html += '<text id="pv4_current#id#" x="360" y="106" class="ft9-#id# right-align#id#" display="' + ((config#id#.show_solar === false || config#id#.solar.pv4.current === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3) ? 'none' : '') + '" fill="var(--solar_colour#id#)" >' + config#id#.solar.pv4.current + ' ' + config#id#.solar.pv4.current_unit + '</text>'
           
+          //html += '<path id="pv4-line#id#" d="M 365 95 L 365 129" class="' + ((config#id#.show_solar === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3) ? 'hidden-#id#' : '') + '" fill="none" stroke="var(--solar_colour#id#)" stroke-width="1" stroke-miterlimit="10"  pointer-events="stroke"/>'
           html += '<path id="pv4-line#id#" d="M 365 95 L 365 135 Q 365 144 358 144 L 275 144" class="' + ((config#id#.show_solar === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3) ? 'hidden-#id#' : '') + '" fill="none" stroke="var(--solar_colour#id#)" stroke-width="1" stroke-miterlimit="10"  pointer-events="stroke"/>'
           html += '<circle id="pv4-dot#id#" cx="0" cy="0" r="3" class="' + ((config#id#.show_solar === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3) ? 'hidden-#id#' : '') + '" fill="' + ((parseInt(config#id#.solar.pv4.power) <= 0) ? 'transparent' : 'var(--solar_colour#id#)') + '">'
-    html += '<animateMotion id="anim_pv4#id#" dur="' + config#id#.solar.animation_speed + 's" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear"><mpath xlink:href="#pv4-line#id#"/></animateMotion></circle>'
+          html += '<animateMotion id="anim_pv4#id#" dur="' + config#id#.solar.animation_speed + 's" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear"><mpath xlink:href="#pv4-line#id#"/></animateMotion></circle>'
+          ///////////////////////////////////////////////////////
+          ////////////////////// PV5 ////////////////////////////
+          ///////////////////////////////////////////////////////
+          html += '<!-- PV5 -->'
+          html += '<rect id="pv5-rect-#id#" x="78" y="18" width="70" height="30" rx="4.5" ry="4.5" fill="none" stroke="var(--solar_colour#id#)" pointer-events="all" class="' + ((config#id#.show_solar === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4) ? 'hidden-#id#' : '') + '"/>'
+          
+          html += '<text x="112" y="13.5" class="ft9-#id# ftw-#id# center-align#id#" display="' + ((config#id#.show_solar === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4) ? 'none' : '') + '" fill="var(--solar_colour#id#)">' + config#id#.solar.pv5.name + '</text>'
+          
+          html += '<text id="pv5_power_state#id#" x="114" y="' + ((config#id#.solar.pv5.energy === false) ? '37.5' : '32.5') + '" class="' + ((config#id#.large_font !== true) ? 'ft12-#id#' : 'ft14-#id#') + ' ftw-#id# center-align#id#" display="'
+          html += (config#id#.show_solar === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4) ? 'none' : ''
+          html += '" fill="var(--solar_colour#id#)">' + trunc#id#(config#id#.solar.pv5.power, 1) + ' ' + config#id#.solar.unit + '</text>'
+          
+          let pv5_energy = autoValueArray#id#((config#id#.solar.pv5.energy || 0),config#id#.solar.pv5.energy_unit)
+          html += '<text id="pv5_energy#id#" x="80" y="43.5" class="ft8-#id# center-align#id#" display="' + ((config#id#.show_solar === false || config#id#.solar.pv5.energy === false  || config#id#.solar.mppts < 5) ? 'none' : '') + '" fill="var(--solar_colour#id#)">'
+          html += trunc#id#(pv5_energy.value, 3, 1) + ' ' + pv5_energy.unit
+          html += '</text>'
+          
+          // entities.pv5_voltage_115
+          html += '<text id="pv5_voltage#id#" x="108" y="' + ((config#id#.solar.pv5.current === false) ? '59.5' : '71.5') + '" class="ft9-#id# right-align#id#" display="' + ((config#id#.show_solar === false || config#id#.solar.pv5.voltage === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4) ? 'none' : '') + '" fill="var(--solar_colour#id#)" >' + config#id#.solar.pv5.voltage + ' ' + config#id#.solar.pv5.voltage_unit + '</text>'
+    
+          // entities.pv5_current_116
+          html += '<text id="pv5_current#id#" x="116" y="59.5" class="ft9-#id# right-align#id#" display="' + ((config#id#.show_solar === false || config#id#.solar.pv5.current === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4) ? 'none' : '') + '" fill="var(--solar_colour#id#)" >' + config#id#.solar.pv5.current + ' ' + config#id#.solar.pv5.current_unit + '</text>'
+          
+          html += '<path id="pv5-line#id#" d="M 113 48 L 113 64.5" class="' + ((config#id#.show_solar === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4) ? 'hidden-#id#' : '') + '" fill="none" stroke="var(--solar_colour#id#)" stroke-width="1" stroke-miterlimit="10"  pointer-events="stroke"/>'
+          html += '<circle id="pv5-dot#id#" cx="0" cy="0" r="3" class="' + ((config#id#.show_solar === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4) ? 'hidden-#id#' : '') + '" fill="' + ((parseInt(config#id#.solar.pv5.power) <= 0) ? 'transparent' : 'var(--solar_colour#id#)') + '">'
+          html += '<animateMotion id="anim_pv5#id#" dur="' + config#id#.solar.animation_speed + 's" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear"><mpath xlink:href="#pv5-line#id#"/></animateMotion></circle>'
+          ///////////////////////////////////////////////////////
+          ////////////////////// PV6 ////////////////////////////
+          ///////////////////////////////////////////////////////
+          html += '<!-- PV6 -->'
+          html += '<rect id="pv6-rect-#id#" x="330" y="18" width="70" height="30" rx="4.5" ry="4.5" fill="none" stroke="var(--solar_colour#id#)" pointer-events="all" class="' + ((config#id#.show_solar === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4 || config#id#.solar.mppts === 5) ? 'hidden-#id#' : '') + '"/>'
+          
+          html += '<text x="364" y="13.5" class="ft9-#id# ftw-#id# center-align#id#" display="' + ((config#id#.show_solar === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4 || config#id#.solar.mppts === 5) ? 'none' : '') + '" fill="var(--solar_colour#id#)">' + config#id#.solar.pv6.name + '</text>'
+          
+          html += '<text id="pv6_power_state#id#" x="366" y="' + ((config#id#.solar.pv6.energy === false) ? '37.5' : '32.5') + '" class="' + ((config#id#.large_font !== true) ? 'ft12-#id#' : 'ft14-#id#') + ' ftw-#id# center-align#id#" display="'
+          html += (config#id#.show_solar === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4 || config#id#.solar.mppts === 5) ? 'none' : ''
+          html += '" fill="var(--solar_colour#id#)">' + trunc#id#(config#id#.solar.pv6.power, 1) + ' ' + config#id#.solar.unit + '</text>'
+          
+          let pv6_energy = autoValueArray#id#((config#id#.solar.pv6.energy || 0),config#id#.solar.pv6.energy_unit)
+          html += '<text id="pv6_energy#id#" x="332" y="43.5" class="ft8-#id# center-align#id#" display="' + ((config#id#.show_solar === false || config#id#.solar.pv6.energy === false  || config#id#.solar.mppts < 6) ? 'none' : '') + '" fill="var(--solar_colour#id#)">'
+          html += trunc#id#(pv6_energy.value, 3, 1) + ' ' + pv6_energy.unit
+          html += '</text>'
+          
+          // entities.pv6_voltage_115
+          html += '<text id="pv6_voltage#id#" x="360" y="' + ((config#id#.solar.pv6.current === false) ? '59.5' : '71.5') + '" class="ft9-#id# right-align#id#" display="' + ((config#id#.show_solar === false || config#id#.solar.pv6.voltage === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4 || config#id#.solar.mppts === 5) ? 'none' : '') + '" fill="var(--solar_colour#id#)" >' + config#id#.solar.pv6.voltage + ' ' + config#id#.solar.pv6.voltage_unit + '</text>'
+    
+          // entities.pv6_current_116
+          html += '<text id="pv6_current#id#" x="368" y="59.5" class="ft9-#id# right-align#id#" display="' + ((config#id#.show_solar === false || config#id#.solar.pv6.current === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4 || config#id#.solar.mppts === 5) ? 'none' : '') + '" fill="var(--solar_colour#id#)" >' + config#id#.solar.pv6.current + ' ' + config#id#.solar.pv6.current_unit + '</text>'
+          
+          html += '<path id="pv6-line#id#" d="M 365 48 L 365 64.5" class="' + ((config#id#.show_solar === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4 || config#id#.solar.mppts === 5) ? 'hidden-#id#' : '') + '" fill="none" stroke="var(--solar_colour#id#)" stroke-width="1" stroke-miterlimit="10"  pointer-events="stroke"/>'
+          html += '<circle id="pv6-dot#id#" cx="0" cy="0" r="3" class="' + ((config#id#.show_solar === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4 || config#id#.solar.mppts === 5) ? 'hidden-#id#' : '') + '" fill="' + ((parseInt(config#id#.solar.pv6.power) <= 0) ? 'transparent' : 'var(--solar_colour#id#)') + '">'
+          html += '<animateMotion id="anim_pv6#id#" dur="' + config#id#.solar.animation_speed + 's" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear"><mpath xlink:href="#pv6-line#id#"/></animateMotion></circle>'
+          ///////////////////////////////////////////////////////
+          ////////////////////// PV7 ////////////////////////////
+          ///////////////////////////////////////////////////////
+          html += '<!-- pv7 -->'
+          html += '<rect id="pv7-rect-#id#" x="78" y="129" width="70" height="30" rx="4.5" ry="4.5" fill="none" stroke="var(--solar_colour#id#)" pointer-events="all" class="' + ((config#id#.show_solar === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4 || config#id#.solar.mppts === 5 || config#id#.solar.mppts === 6) ? 'hidden-#id#' : '') + '"/>'
+          
+          html += '<text x="112" y="124.5" class="ft9-#id# ftw-#id# center-align#id#" display="' + ((config#id#.show_solar === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4 || config#id#.solar.mppts === 5 || config#id#.solar.mppts === 6) ? 'none' : '') + '" fill="var(--solar_colour#id#)">' + config#id#.solar.pv7.name + '</text>'
+          
+          html += '<text id="pv7_power_state#id#" x="113" y="' + ((config#id#.solar.pv7.energy === false) ? '148.5' : '143.5') + '" class="' + ((config#id#.large_font !== true) ? 'ft12-#id#' : 'ft14-#id#') + ' ftw-#id# center-align#id#" display="'
+          html += (config#id#.show_solar === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4 || config#id#.solar.mppts === 5 || config#id#.solar.mppts === 6) ? 'none' : ''
+          html += '" fill="var(--solar_colour#id#)">' + trunc#id#(config#id#.solar.pv7.power, 1) + ' ' + config#id#.solar.unit + '</text>'
+          
+          let pv7_energy = autoValueArray#id#((config#id#.solar.pv7.energy || 0),config#id#.solar.pv7.energy_unit)
+          html += '<text id="pv7_energy#id#" x="113" y="154.5" class="ft8-#id# center-align#id#" display="' + ((config#id#.show_solar === false || config#id#.solar.pv7.energy === false || config#id#.solar.mppts < 7) ? 'none' : '') + '" fill="var(--solar_colour#id#)">'
+          html += trunc#id#(pv7_energy.value, 3, 1) + ' ' + pv7_energy.unit
+          html += '</text>'
+          
+          // entities.pv7_voltage_113
+          html += '<text id="pv7_voltage#id#" x="107" y="' + ((config#id#.solar.pv7.current === false) ? '170.5' : '182.5') + '" class="ft9-#id# right-align#id#" display="' + ((config#id#.show_solar === false || config#id#.solar.pv7.voltage === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4 || config#id#.solar.mppts === 5 || config#id#.solar.mppts === 6) ? 'none' : '') + '" fill="var(--solar_colour#id#)" >' + config#id#.solar.pv7.voltage + ' ' + config#id#.solar.pv7.voltage_unit + '</text>'
+    
+          // entities.pv7_current_114
+          html += '<text id="pv7_current#id#" x="107" y="170.5" class="ft9-#id# right-align#id#" display="' + ((config#id#.show_solar === false || config#id#.solar.pv7.current === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4 || config#id#.solar.mppts === 5 || config#id#.solar.mppts === 6) ? 'none' : '') + '" fill="var(--solar_colour#id#)" >' + config#id#.solar.pv7.current + ' ' + config#id#.solar.pv7.current_unit + '</text>'
+          
+          html += '<path id="pv7-line#id#" d="M 148 144 L 205 144" class="' + ((config#id#.show_solar === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4 || config#id#.solar.mppts === 5 || config#id#.solar.mppts === 6) ? 'hidden-#id#' : '') + '" fill="none" stroke="var(--solar_colour#id#)" stroke-width="1" stroke-miterlimit="10"  pointer-events="stroke"/>'
+          html += '<circle id="pv7-dot#id#" cx="0" cy="0" r="3" class="' + ((config#id#.show_solar === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4 || config#id#.solar.mppts === 5 || config#id#.solar.mppts === 6) ? 'hidden-#id#' : '') + '" fill="' + ((parseInt(config#id#.solar.pv7.power) <= 0) ? 'transparent' : 'var(--solar_colour#id#)') + '">'
+          html += '<animateMotion id="anim_pv7#id#" dur="' + config#id#.solar.animation_speed + 's" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear"><mpath xlink:href="#pv7-line#id#"/></animateMotion></circle>'
+          ///////////////////////////////////////////////////////
+          ////////////////////// PV8 ////////////////////////////
+          ///////////////////////////////////////////////////////
+          html += '<!-- pv8 -->'
+          html += '<rect id="pv8-rect-#id#" x="330" y="129" width="70" height="30" rx="4.5" ry="4.5" fill="none" stroke="var(--solar_colour#id#)" pointer-events="all" class="' + ((config#id#.show_solar === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4 || config#id#.solar.mppts === 5 || config#id#.solar.mppts === 6 || config#id#.solar.mppts === 7) ? 'hidden-#id#' : '') + '"/>'
+          
+          html += '<text x="364" y="124.5" class="ft9-#id# ftw-#id# center-align#id#" display="' + ((config#id#.show_solar === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4 || config#id#.solar.mppts === 5 || config#id#.solar.mppts === 6 || config#id#.solar.mppts === 7) ? 'none' : '') + '" fill="var(--solar_colour#id#)">' + config#id#.solar.pv8.name + '</text>'
+          
+          html += '<text id="pv8_power_state#id#" x="366" y="' + ((config#id#.solar.pv8.energy === false) ? '148.5' : '143.5') + '" class="' + ((config#id#.large_font !== true) ? 'ft12-#id#' : 'ft14-#id#') + ' ftw-#id# center-align#id#" display="'
+          html += (config#id#.show_solar === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4 || config#id#.solar.mppts === 5 || config#id#.solar.mppts === 6 || config#id#.solar.mppts === 7) ? 'none' : ''
+          html += '" fill="var(--solar_colour#id#)">' + trunc#id#(config#id#.solar.pv8.power, 1) + ' ' + config#id#.solar.unit + '</text>'
+          
+          let pv8_energy = autoValueArray#id#((config#id#.solar.pv8.energy || 0),config#id#.solar.pv8.energy_unit)
+          html += '<text id="pv8_energy#id#" x="332" y="154.5" class="ft8-#id# center-align#id#" display="' + ((config#id#.show_solar === false || config#id#.solar.pv8.energy === false || config#id#.solar.mppts < 8) ? 'none' : '') + '" fill="var(--solar_colour#id#)">'
+          html += trunc#id#(pv8_energy.value, 3, 1) + ' ' + pv8_energy.unit
+          html += '</text>'
+          
+          // entities.pv8_voltage_113
+          html += '<text id="pv8_voltage#id#" x="360" y="' + ((config#id#.solar.pv8.current === false) ? '170.5' : '182.5') + '" class="ft9-#id# right-align#id#" display="' + ((config#id#.show_solar === false || config#id#.solar.pv8.voltage === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4 || config#id#.solar.mppts === 5 || config#id#.solar.mppts === 6 || config#id#.solar.mppts === 7) ? 'none' : '') + '" fill="var(--solar_colour#id#)" >' + config#id#.solar.pv8.voltage + ' ' + config#id#.solar.pv8.voltage_unit + '</text>'
+    
+          // entities.pv8_current_114
+          html += '<text id="pv8_current#id#" x="368" y="170.5" class="ft9-#id# right-align#id#" display="' + ((config#id#.show_solar === false || config#id#.solar.pv8.current === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4 || config#id#.solar.mppts === 5 || config#id#.solar.mppts === 6 || config#id#.solar.mppts === 7) ? 'none' : '') + '" fill="var(--solar_colour#id#)" >' + config#id#.solar.pv8.current + ' ' + config#id#.solar.pv8.current_unit + '</text>'
+          
+          html += '<path id="pv8-line#id#" d="M 330 144 L 275 144" class="' + ((config#id#.show_solar === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4 || config#id#.solar.mppts === 5 || config#id#.solar.mppts === 6 || config#id#.solar.mppts === 7) ? 'hidden-#id#' : '') + '" fill="none" stroke="var(--solar_colour#id#)" stroke-width="1" stroke-miterlimit="10"  pointer-events="stroke"/>'
+          html += '<circle id="pv8-dot#id#" cx="0" cy="0" r="3" class="' + ((config#id#.show_solar === false || config#id#.solar.mppts === 1 || config#id#.solar.mppts === 2 || config#id#.solar.mppts === 3 || config#id#.solar.mppts === 4 || config#id#.solar.mppts === 5 || config#id#.solar.mppts === 6 || config#id#.solar.mppts === 7) ? 'hidden-#id#' : '') + '" fill="' + ((parseInt(config#id#.solar.pv8.power) <= 0) ? 'transparent' : 'var(--solar_colour#id#)') + '">'
+          html += '<animateMotion id="anim_pv8#id#" dur="' + config#id#.solar.animation_speed + 's" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear"><mpath xlink:href="#pv8-line#id#"/></animateMotion></circle>'
           ///////////////////////////////////////////////////////
           ////////////////////// Load ///////////////////////////
           ///////////////////////////////////////////////////////
@@ -2931,7 +3468,11 @@ if ("#colorDanger#" != '#'+'colorDanger#') document.documentElement.style.setPro
               ((config#id#.solar.pv1.power) * 1000) +
               ((config#id#.solar.pv2.power) * 1000) +
               ((config#id#.solar.pv3.power) * 1000) +
-              ((config#id#.solar.pv4.power) * 1000)
+              ((config#id#.solar.pv4.power) * 1000) +
+              ((config#id#.solar.pv5.power) * 1000) +
+              ((config#id#.solar.pv6.power) * 1000) +
+              ((config#id#.solar.pv7.power) * 1000) +
+              ((config#id#.solar.pv8.power) * 1000)
             ) / 1000
         }
         
@@ -2945,6 +3486,10 @@ if ("#colorDanger#" != '#'+'colorDanger#') document.documentElement.style.setPro
         document.getElementById("anim_pv2#id#")?.setAttribute("dur",speed);
         document.getElementById("anim_pv3#id#")?.setAttribute("dur",speed);
         document.getElementById("anim_pv4#id#")?.setAttribute("dur",speed);
+        document.getElementById("anim_pv5#id#")?.setAttribute("dur",speed);
+        document.getElementById("anim_pv6#id#")?.setAttribute("dur",speed);
+        document.getElementById("anim_pv7#id#")?.setAttribute("dur",speed);
+        document.getElementById("anim_pv8#id#")?.setAttribute("dur",speed);
         
         if (debug#id#) console.log('| animation_speed = ' + speed);
         
@@ -2952,6 +3497,10 @@ if ("#colorDanger#" != '#'+'colorDanger#') document.documentElement.style.setPro
         if (debug#id#) console.log('| pv2_power = ' + parseFloat(config#id#.solar.pv2.power) + ' (' + config#id#.solar.pv2.power + ')');
         if (debug#id#) console.log('| pv3_power = ' + parseFloat(config#id#.solar.pv3.power) + ' (' + config#id#.solar.pv3.power + ')');
         if (debug#id#) console.log('| pv4_power = ' + parseFloat(config#id#.solar.pv4.power) + ' (' + config#id#.solar.pv4.power + ')');
+        if (debug#id#) console.log('| pv5_power = ' + parseFloat(config#id#.solar.pv5.power) + ' (' + config#id#.solar.pv5.power + ')');
+        if (debug#id#) console.log('| pv6_power = ' + parseFloat(config#id#.solar.pv6.power) + ' (' + config#id#.solar.pv6.power + ')');
+        if (debug#id#) console.log('| pv7_power = ' + parseFloat(config#id#.solar.pv7.power) + ' (' + config#id#.solar.pv7.power + ')');
+        if (debug#id#) console.log('| pv8_power = ' + parseFloat(config#id#.solar.pv8.power) + ' (' + config#id#.solar.pv8.power + ')');
         if (debug#id#) console.log('| total_pv = ' + total_pv);
         total_pv = trunc#id#(total_pv, 1)
         config#id#.solar.power = total_pv
@@ -2965,6 +3514,14 @@ if ("#colorDanger#" != '#'+'colorDanger#') document.documentElement.style.setPro
         else document.getElementById("pv3-dot#id#").setAttribute("fill", "transparent");
         if(config#id#.solar.pv4.power > 0) document.getElementById("pv4-dot#id#").setAttribute("fill", "var(--solar_colour#id#)");
         else document.getElementById("pv4-dot#id#").setAttribute("fill", "transparent");
+        if(config#id#.solar.pv5.power > 0) document.getElementById("pv5-dot#id#").setAttribute("fill", "var(--solar_colour#id#)");
+        else document.getElementById("pv5-dot#id#").setAttribute("fill", "transparent");
+        if(config#id#.solar.pv6.power > 0) document.getElementById("pv6-dot#id#").setAttribute("fill", "var(--solar_colour#id#)");
+        else document.getElementById("pv6-dot#id#").setAttribute("fill", "transparent");
+        if(config#id#.solar.pv7.power > 0) document.getElementById("pv7-dot#id#").setAttribute("fill", "var(--solar_colour#id#)");
+        else document.getElementById("pv7-dot#id#").setAttribute("fill", "transparent");
+        if(config#id#.solar.pv8.power > 0) document.getElementById("pv8-dot#id#").setAttribute("fill", "var(--solar_colour#id#)");
+        else document.getElementById("pv8-dot#id#").setAttribute("fill", "transparent");
         if(total_pv > 0) document.getElementById("so-dot#id#").setAttribute("fill", "var(--solar_colour#id#)");
         else document.getElementById("so-dot#id#").setAttribute("fill", "transparent");
         
@@ -3262,6 +3819,10 @@ if ("#colorDanger#" != '#'+'colorDanger#') document.documentElement.style.setPro
     <div>pv2Name : personnalisation du nom du Pv2. (Ex: Ouest, Nord, PV2 ...)</div>
     <div>pv3Name : personnalisation du nom du Pv3. (Ex: Ouest, Nord, PV3 ...)</div>
     <div>pv4Name : personnalisation du nom du Pv4. (Ex: Ouest, Nord, PV4 ...)</div>
+    <div>pv5Name : personnalisation du nom du Pv5. (Ex: Ouest, Nord, PV5 ...)</div>
+    <div>pv6Name : personnalisation du nom du Pv6. (Ex: Ouest, Nord, PV6 ...)</div>
+    <div>pv7Name : personnalisation du nom du Pv7. (Ex: Ouest, Nord, PV7 ...)</div>
+    <div>pv8Name : personnalisation du nom du Pv8. (Ex: Ouest, Nord, PV8 ...)</div>
     <div>dailySolarText : personnalisation du texte. (défaut : DAILY SOLAR)</div>
     <div>pvMaxPower : Puissance max des PV. (permet la gestion de vitesse de l'animation)</div>
     <div>solarColor : Couleur des éléments de catégorie "solaire" [ Exemple : #fffff, white]</div>
