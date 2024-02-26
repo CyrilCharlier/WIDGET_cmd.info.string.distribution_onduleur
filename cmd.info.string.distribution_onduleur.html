@@ -655,7 +655,7 @@
       if (is_numeric('#loadMaxPower#')) config#id#.load.max_power = '#loadMaxPower#'
       if ("#loadColor#" != '#'+'loadColor#') document.documentElement.style.setProperty('--load_colour#id#', '#loadColor#')
       if ("#blink#" == 1) config#id#.blink = true
-  if ("#colorDanger#" != '#'+'colorDanger#') document.documentElement.style.setProperty('--color_alerte#id#', '#colorDanger#')
+      if ("#colorDanger#" != '#'+'colorDanger#') document.documentElement.style.setProperty('--color_alerte#id#', '#colorDanger#')
       ////////////////////////// grid /////////////////////////
       if ("#dailyGridSellText#" != '#'+'dailyGridSellText#') config#id#.grid.daily.text_sell = "#dailyGridSellText#"
       if ("#dailyGridBuyText#" != '#'+'dailyGridBuyText#') config#id#.grid.daily.text_buy = "#dailyGridBuyText#"
@@ -2900,7 +2900,7 @@
           
           if (init) {
             var html = '<div class="container#id# card#id#">';
-            html += '<svg viewBox="-0.5 ' + ((config#id#.show_solar === false) ? ((config#id#.load.additional_loads >= 1) ? '110' : '145') : ((config#id#.solar.mppts == 1) ? '65' : '0'))
+            html += '<svg viewBox="-0.5 ' + ((config#id#.show_solar === false) ? ((config#id#.load.additional_loads >= 1) ? '110' : '145') : ((config#id#.solar.mppts == 1) ? (config#id#.load.additional_loads > 8 ? '45' : '65' ) : '0'))
             
             //if (config#id#.load.additional_loads == 1 || config#id#.load.additional_loads == 2) html += ' 500'
             //else if (config#id#.load.additional_loads >= 3) html += ' 560'
@@ -2911,7 +2911,7 @@
             else if (config#id#.load.additional_loads == 7 || config#id#.load.additional_loads >= 8) html += ' 740'
             else html += ' 500'
             
-            html += ((config#id#.show_solar === false) ? ((config#id#.load.additional_loads >= 1) ? ' 292' : ' 270') : ((config#id#.solar.mppts == 1) ? ' 340' : ' 406'))
+            html += ((config#id#.show_solar === false) ? ((config#id#.load.additional_loads >= 1) ? ' 292' : ' 270') : ((config#id#.solar.mppts == 1) ? (config#id#.load.additional_loads > 9 ? ' 380' : ' 340' ) : ' 406'))
             html += '" preserveAspectRatio="xMidYMid meet" height="'
             
             // height="${panel === false ? `${config#id#.show_solar === false ? '246px' : `${height}`}` : `${config#id#.show_solar === false ? '75%' : '100%'}`}"
